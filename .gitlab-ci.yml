@@ -4,7 +4,6 @@ stages:
   - build
   - test
   - dockerize
-  - push-docker
 
 build application:
   stage: build
@@ -18,4 +17,12 @@ test application:
   stage: test
   script:
     - go test
-  
+
+dockerize application:
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build --tag $CI_REGISTRY_USER/$REGISTRY_IMAGE .
+    - docker push $REGISTRY_IMAGE
