@@ -1,4 +1,5 @@
 image: golang:1.17-buster
+
 stages:
   - build
   - test
@@ -12,3 +13,9 @@ build application:
   artifacts:
     paths:
       - ./server
+
+test application:
+  stage: test
+  script:
+    - go test
+  
