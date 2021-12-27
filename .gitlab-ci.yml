@@ -25,5 +25,5 @@ dockerize application:
     - docker:dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-    - docker build --tag $REGISTRY_IMAGE .
-    - docker push $REGISTRY_IMAGE
+    - docker build --tag $CI_REGISTRY_USER/$REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_USER/$REGISTRY_IMAGE
