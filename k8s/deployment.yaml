@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: golang-application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: golang-application
+  template:
+    metadata:
+      labels:
+        app: golang-application
+    spec:
+      containers:
+      - name: golang-application
+        image: cesimego/first-ci-cd
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3000
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-application
+  labels:
+    app: golang-application
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "n1b"
+spec:
+  externalTrafficPolicy: Local
+  ports:
+    - name: golang-application
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: golang-application
+  type: LoadBalancer

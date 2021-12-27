@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - dockerize
+  - gkedeploy
 
 build application:
   stage: build
@@ -27,3 +28,10 @@ dockerize application:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
     - docker build --tag $CI_REGISTRY_USER/$REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_USER/$REGISTRY_IMAGE
+
+deploy application:
+  stage: gkedeploy
+  image: google/cloud-sdk
+  script:
+    - gcloud container clusters get-credentials $CLUSTER_NAME --zone europe-west4-c --project $CLOUD_PROJECT_NAME
+    - kubectl apply -f k8s/deployment.yaml
